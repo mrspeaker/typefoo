@@ -1,0 +1,3 @@
+# TypeFoo
+
+A typing platformer
