@@ -57,6 +57,12 @@ class World {
     //layer.resizeWorld();
     layer.cameraOffset.x = 8;
     layer.cameraOffset.y = 8;
+
+    const mask = game.add.graphics(0, 0);
+    mask.beginFill(0xffffff);
+    mask.drawCircle(0, 0, 280);
+    layer.mask = mask;
+    this.mask = mask;
   }
 
   reset () {
@@ -78,27 +84,42 @@ class World {
       const left = this.letters[yt][xt - 1];
       const right = this.letters[yt][xt + 1];
       const jump = this.letters[yt - 1][xt];
+      const upleft = this.letters[yt - 1][xt - 1];
+      const upright = this.letters[yt - 1][xt + 1];
 
       const spd = 50;
 
-      if (keyCode === jump) {
-        this.sprite.body.velocity.y += -spd * 3;
-      }
       if (keyCode === left) {
-        sprite.body.velocity.x += -spd;
+        //sprite.body.velocity.x += -spd;
+        sprite.position.x = (xt - 1) * 32;
       }
-      if (keyCode === right) {
-        sprite.body.velocity.x += spd;
+      else if (keyCode === right) {
+        //sprite.body.velocity.x += spd;
+        sprite.position.x = (xt + 1) * 32;
       }
+      else if (keyCode === jump || keyCode === upleft || keyCode === upright) {
+        this.sprite.body.velocity.y += -spd * 3;
+        if (keyCode === jump) {}
+        else if (keyCode === upleft) {
+          this.sprite.body.velocity.x -= spd * 2;
+        }
+        else if (keyCode === upright) {
+          this.sprite.body.velocity.x += spd * 2;
+        }
+      }
+
     };
   }
 
   update (game) {
-    const {cursors, sprite, layer} = this;
+    const {cursors, sprite, layer, mask} = this;
     game.physics.arcade.collide(sprite, layer);
 
+    mask.position.x = sprite.position.x + 5;
+    mask.position.y = sprite.position.y + 24;
+
     //  Un-comment these to gain full control over the sprite
-    sprite.body.velocity.x *= 0.98;
+    sprite.body.velocity.x *= 0.99;
     //sprite.body.velocity.y = 0;
 
     const spd = 150;
