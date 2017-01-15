@@ -1,5 +1,7 @@
 const Phaser = window.Phaser;
 
+import Proto from "../protos/Proto1";
+
 class World {
 
   preload ( game ) {
@@ -30,95 +32,33 @@ class World {
     game.physics.arcade.gravity.y = 200;
     this.cursors = game.input.keyboard.createCursorKeys();
 
-    this.createMap(game, map.width, map.height);
-
-    //const l2 = map.createLayer("Tile Layer 2");
+    Proto.create(game, map.width, map.height);
 
 
     this.reset();
     this.bindInput();
   }
 
-  createMap (game, w, h) {
-
-    this.letters = Array.from(new Array(h), () => {
-      return Array.from(new Array(w), () => {
-        return game.rnd.between(65, 65+25);
-      });
-    });
-    const data = this.letters.reduce((str, el) => {
-      return str + el.join(",") + "\n";
-    }, "");
-
-    game.cache.addTilemap("dynamicMap", null, data, Phaser.Tilemap.CSV);
-    const map = game.add.tilemap("dynamicMap", 32, 32);
-    map.addTilesetImage("tiles", "tiles", 16, 16);
-    const layer = map.createLayer(0);
-    //layer.resizeWorld();
-    layer.cameraOffset.x = 8;
-    layer.cameraOffset.y = 8;
-
-    const mask = game.add.graphics(0, 0);
-    mask.beginFill(0xffffff);
-    mask.drawCircle(0, 0, 280);
-    layer.mask = mask;
-    this.mask = mask;
-  }
-
   reset () {
     const { game } = this;
-    game.stage.backgroundColor = 0x94D7ED;
+    game.stage.backgroundColor = 0x0;
   }
 
   bindInput () {
     const { game, sprite } = this;
 
-    game.input.keyboard.onDownCallback = ({keyCode, key}) => {
+    game.input.keyboard.onDownCallback = ({keyCode}) => {
       //console.log(keyCode);
-
-      // Get letters around...
-      const xt = Math.round(sprite.position.x / 32);
-      const yt = Math.round(sprite.position.y / 32);
-
-
-      const left = this.letters[yt][xt - 1];
-      const right = this.letters[yt][xt + 1];
-      const jump = this.letters[yt - 1][xt];
-      const upleft = this.letters[yt - 1][xt - 1];
-      const upright = this.letters[yt - 1][xt + 1];
-
-      const spd = 50;
-
-      if (keyCode === left) {
-        //sprite.body.velocity.x += -spd;
-        sprite.position.x = (xt - 1) * 32;
-      }
-      else if (keyCode === right) {
-        //sprite.body.velocity.x += spd;
-        sprite.position.x = (xt + 1) * 32;
-      }
-      else if (keyCode === jump || keyCode === upleft || keyCode === upright) {
-        this.sprite.body.velocity.y += -spd * 3;
-        if (keyCode === jump) {}
-        else if (keyCode === upleft) {
-          this.sprite.body.velocity.x -= spd * 2;
-        }
-        else if (keyCode === upright) {
-          this.sprite.body.velocity.x += spd * 2;
-        }
-      }
-
+      Proto.move(keyCode, sprite);
     };
   }
 
   update (game) {
-    const {cursors, sprite, layer, mask} = this;
+    const {cursors, sprite, layer} = this;
     game.physics.arcade.collide(sprite, layer);
 
-    mask.position.x = sprite.position.x + 5;
-    mask.position.y = sprite.position.y + 24;
+    Proto.update(game, sprite);
 
-    //  Un-comment these to gain full control over the sprite
     sprite.body.velocity.x *= 0.99;
     //sprite.body.velocity.y = 0;
 
