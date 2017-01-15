@@ -1,18 +1,62 @@
 const Phaser = window.Phaser;
 
-const style = { font: "26px helvetica", fill: "#333"};
-
 class World {
 
   preload ( game ) {
     const { load } = game;
+    load.image("tiles", "res/dwarf.png");
+    load.tilemap("map", "res/collision_test.json", null, Phaser.Tilemap.TILED_JSON);
+    load.image("ground_1x1", "res/ground_1x1.png");
+    load.image("phaser", "res/phaser-dude.png");
+
   }
 
   create ( game ) {
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    // game.physics.startSystem(Phaser.Physics.ARCADE);
+    const map = this.map = game.add.tilemap("map");
+    map.addTilesetImage("ground_1x1");
+    const layer = this.layer = map.createLayer("Tile Layer 1");
+    layer.resizeWorld();
+    map.setCollisionBetween(1, 12);
+
+    const sprite = this.sprite = game.add.sprite(260, 70, "phaser");
+    game.physics.enable(sprite);
+
+    //sprite.body.bounce.set(0.6);
+    sprite.body.drag = 50;
+    sprite.body.tilePadding.set(32);
+
+    game.camera.follow(sprite);
+    game.physics.arcade.gravity.y = 200;
+    this.cursors = game.input.keyboard.createCursorKeys();
+
+    this.createMap(game, map.width, map.height);
+
+    //const l2 = map.createLayer("Tile Layer 2");
+
 
     this.reset();
     this.bindInput();
+  }
+
+  createMap (game, w, h) {
+
+    this.letters = Array.from(new Array(h), () => {
+      return Array.from(new Array(w), () => {
+        return game.rnd.between(65, 65+25);
+      });
+    });
+    const data = this.letters.reduce((str, el) => {
+      return str + el.join(",") + "\n";
+    }, "");
+
+    game.cache.addTilemap("dynamicMap", null, data, Phaser.Tilemap.CSV);
+    const map = game.add.tilemap("dynamicMap", 32, 32);
+    map.addTilesetImage("tiles", "tiles", 16, 16);
+    const layer = map.createLayer(0);
+    //layer.resizeWorld();
+    layer.cameraOffset.x = 8;
+    layer.cameraOffset.y = 8;
   }
 
   reset () {
@@ -21,15 +65,61 @@ class World {
   }
 
   bindInput () {
-    const { game } = this;
+    const { game, sprite } = this;
+
+    game.input.keyboard.onDownCallback = ({keyCode, key}) => {
+      //console.log(keyCode);
+
+      // Get letters around...
+      const xt = Math.round(sprite.position.x / 32);
+      const yt = Math.round(sprite.position.y / 32);
+
+
+      const left = this.letters[yt][xt - 1];
+      const right = this.letters[yt][xt + 1];
+      const jump = this.letters[yt - 1][xt];
+
+      const spd = 50;
+
+      if (keyCode === jump) {
+        this.sprite.body.velocity.y += -spd * 3;
+      }
+      if (keyCode === left) {
+        sprite.body.velocity.x += -spd;
+      }
+      if (keyCode === right) {
+        sprite.body.velocity.x += spd;
+      }
+    };
   }
 
   update (game) {
+    const {cursors, sprite, layer} = this;
+    game.physics.arcade.collide(sprite, layer);
 
+    //  Un-comment these to gain full control over the sprite
+    sprite.body.velocity.x *= 0.98;
+    //sprite.body.velocity.y = 0;
+
+    const spd = 150;
+
+    if (cursors.up.isDown) {
+      sprite.body.velocity.y = -spd;
+    }
+    else if (cursors.down.isDown) {
+      sprite.body.velocity.y = spd;
+    }
+
+    if (cursors.left.isDown) {
+      sprite.body.velocity.x = -spd;
+    }
+    else if (cursors.right.isDown) {
+      sprite.body.velocity.x = spd;
+    }
   }
 
   render (game) {
-  
+
   }
 
 
