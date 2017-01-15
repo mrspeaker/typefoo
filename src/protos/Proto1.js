@@ -72,7 +72,7 @@ class Proto1 extends Proto {
   update (game, player) {
     const {sprites} = this;
     const {mask} = sprites;
-    mask.position.x = player.position.x + 5;
+    mask.position.x = player.position.x + 12;
     mask.position.y = player.position.y + 24;
   }
 

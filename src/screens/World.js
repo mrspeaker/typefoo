@@ -1,12 +1,13 @@
 const Phaser = window.Phaser;
 
-import Proto from "../protos/Proto1";
+import Proto from "../protos/Proto2";
 
 class World {
 
   preload ( game ) {
     const { load } = game;
-    load.image("tiles", "res/dwarf.png");
+    load.spritesheet("tiles", "res/dwarf.png", 16, 16);
+
     load.tilemap("map", "res/collision_test.json", null, Phaser.Tilemap.TILED_JSON);
     load.image("ground_1x1", "res/ground_1x1.png");
     load.image("phaser", "res/phaser-dude.png");
@@ -49,7 +50,7 @@ class World {
 
     game.input.keyboard.onDownCallback = ({keyCode}) => {
       //console.log(keyCode);
-      Proto.move(keyCode, sprite);
+      Proto.move(keyCode, sprite, game);
     };
   }
 

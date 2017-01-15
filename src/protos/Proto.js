@@ -1,6 +1,5 @@
 class Proto {
-  createLetters () {}
-  createSprites () {}
+  create () {}
   move () {}
   update () {}
 }
