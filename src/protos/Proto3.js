@@ -1,13 +1,23 @@
 const Phaser = window.Phaser;
 import Proto from "./Proto";
+import SimplexNoise from "../../lib/SimplexNoise";
 
-class Proto1 extends Proto {
-  create (game, w, h) {
-    this.letters = Array.from(new Array(h), () => {
-      return Array.from(new Array(w), () => {
-        return game.rnd.between(65, 65+25);
+class Proto3 extends Proto {
+  create (game, w, h, solidLayer) {
+    const data = solidLayer.layer.data;
+    const simplex = new SimplexNoise();
+
+    this.letters = Array.from(new Array(h), (_, j) => {
+      return Array.from(new Array(w), (_, i) => {
+        const val = simplex.noise2D(j / 1, i / 1);
+
+        if (data[j][i].index !== -1) return 32;
+
+
+        return val > 0 && val < 1 ? game.rnd.between(65, 65+25) : 32;
       });
     });
+
     this.sprites = this.createSprites(game);
   }
 
@@ -78,4 +88,4 @@ class Proto1 extends Proto {
 
 }
 
-export default new Proto1();
+export default new Proto3();

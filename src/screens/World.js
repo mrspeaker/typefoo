@@ -33,7 +33,7 @@ class World {
     game.physics.arcade.gravity.y = 200;
     this.cursors = game.input.keyboard.createCursorKeys();
 
-    Proto.create(game, map.width, map.height);
+    Proto.create(game, map.width, map.height, layer);
 
 
     this.reset();
