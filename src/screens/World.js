@@ -1,6 +1,6 @@
 const Phaser = window.Phaser;
 
-import Proto from "../protos/Proto2";
+import Proto from "../protos/Proto4";
 
 class World {
 
@@ -33,7 +33,7 @@ class World {
     game.physics.arcade.gravity.y = 200;
     this.cursors = game.input.keyboard.createCursorKeys();
 
-    Proto.create(game, map.width, map.height, layer);
+    Proto.create(game, map);//map.width, map.height, layer);
 
 
     this.reset();

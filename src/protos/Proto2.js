@@ -6,8 +6,8 @@ class Proto2 extends Proto {
     const cut = str => str.toUpperCase().split("").map(c => c.charCodeAt(0));
     this.letters = {
       up: { x: 0, y: -1, phrase: "yuyuyuyuyuyuyuyu" },
-      left: { x: -1, y: 0, phrase: "jkjkjkjkjkjkjkjk" },
-      right: { x: 1, y: 0, phrase: "fdfdfdfdfdfdfd"},
+      left: { x: -1, y: 0, phrase: "fdfdfdfdfdfdfd" },
+      right: { x: 1, y: 0, phrase: "jkjkjkjkjkjkjkjk"},
       //leftup: {text: cut("artichoke"), x: -1, y: -1},
       //rightup: {text: cut("hairspray"), x: 1, y: -1},
     };

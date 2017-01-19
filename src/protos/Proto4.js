@@ -2,22 +2,27 @@ const Phaser = window.Phaser;
 import Proto from "./Proto";
 import SimplexNoise from "../../lib/SimplexNoise";
 
-class Proto3 extends Proto {
+class Proto4 extends Proto {
   create (game, map) {
     const w = map.width;
     const h = map.height;
     const solidLayer = map.layers[0];
-    const data = solidLayer.layer.data;
+    const data = solidLayer.data;
     const simplex = new SimplexNoise();
+
+    map.layers[0].x = 1000;//false;
+    map.layers[0].dirty = true;
+    console.log(map);
 
     this.letters = Array.from(new Array(h), (_, j) => {
       return Array.from(new Array(w), (_, i) => {
         const val = simplex.noise2D(j / 1, i / 1);
 
-        if (data[j][i].index !== -1) return 32;
+        if (data[j][i].index !== -1) return game.rnd.between(65, 65+25);
+        return 32;
 
 
-        return val > 0 && val < 1 ? game.rnd.between(65, 65+25) : 32;
+        //return val > 0 && val < 1 ? game.rnd.between(65, 65+25) : 32;
       });
     });
 
@@ -36,13 +41,13 @@ class Proto3 extends Proto {
     layer.cameraOffset.x = 8;
     layer.cameraOffset.y = 8;
 
-    const mask = game.add.graphics(0, 0);
+    /*const mask = game.add.graphics(0, 0);
     mask.beginFill(0xffffff);
     mask.drawCircle(0, 0, 380);
-    layer.mask = mask;
+    layer.mask = mask;*/
 
     return {
-      mask,
+      //mask,
       map,
       layer
     };
@@ -84,11 +89,11 @@ class Proto3 extends Proto {
 
   update (game, player) {
     const {sprites} = this;
-    const {mask} = sprites;
-    mask.position.x = player.position.x + 12;
-    mask.position.y = player.position.y + 24;
+    //const {mask} = sprites;
+    //mask.position.x = player.position.x + 12;
+    //mask.position.y = player.position.y + 24;
   }
 
 }
 
-export default new Proto3();
+export default new Proto4();

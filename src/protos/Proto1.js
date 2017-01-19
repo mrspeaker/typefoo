@@ -2,7 +2,9 @@ const Phaser = window.Phaser;
 import Proto from "./Proto";
 
 class Proto1 extends Proto {
-  create (game, w, h) {
+  create (game, map) {
+    const w = map.width;
+    const h = map.height;
     this.letters = Array.from(new Array(h), () => {
       return Array.from(new Array(w), () => {
         return game.rnd.between(65, 65+25);
