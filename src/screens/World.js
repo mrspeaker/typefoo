@@ -19,6 +19,7 @@ class World {
     const map = this.map = game.add.tilemap("map");
     map.addTilesetImage("ground_1x1");
     const layer = this.layer = map.createLayer("Tile Layer 1");
+
     layer.resizeWorld();
     map.setCollisionBetween(1, 12);
 
@@ -33,7 +34,7 @@ class World {
     game.physics.arcade.gravity.y = 200;
     this.cursors = game.input.keyboard.createCursorKeys();
 
-    Proto.create(game, map);//map.width, map.height, layer);
+    Proto.create(game, map, layer);//map.width, map.height, layer);
 
 
     this.reset();

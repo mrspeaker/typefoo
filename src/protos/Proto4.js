@@ -3,16 +3,19 @@ import Proto from "./Proto";
 import SimplexNoise from "../../lib/SimplexNoise";
 
 class Proto4 extends Proto {
-  create (game, map) {
+  create (game, map, l) {
     const w = map.width;
     const h = map.height;
     const solidLayer = map.layers[0];
     const data = solidLayer.data;
     const simplex = new SimplexNoise();
 
-    map.layers[0].x = 1000;//false;
-    map.layers[0].dirty = true;
-    console.log(map);
+    //const layer = map.getLayer(map.layers[0].name);//.x = 10;//false;
+    //layer.angle = Math.PI;
+    l.visible = false;
+    //layer.dirty = true;*/
+
+    //console.log(map.layer);
 
     this.letters = Array.from(new Array(h), (_, j) => {
       return Array.from(new Array(w), (_, i) => {
