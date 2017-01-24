@@ -10,6 +10,8 @@ class Proto4 extends Proto {
     const data = solidLayer.data;
     const simplex = new SimplexNoise();
 
+    this.keyCodes = [];
+
     //const layer = map.getLayer(map.layers[0].name);//.x = 10;//false;
     //layer.angle = Math.PI;
     l.visible = false;
@@ -58,6 +60,8 @@ class Proto4 extends Proto {
 
   move (keyCode, sprite) {
 
+    this.keyCodes = [...this.keyCodes, keyCode].slice(-3);
+
     // Get letters around...
     const xt = Math.round(sprite.position.x / 32);
     const yt = Math.round(sprite.position.y / 32);
@@ -87,6 +91,20 @@ class Proto4 extends Proto {
       else if (keyCode === upright) {
         sprite.body.velocity.x += spd * 2;
       }
+    }
+
+    if (this.keyCodes.length === 3) {
+      this.letters.forEach((row, y) => {
+        for (let x = 1; x < row.length - 1; x++) {
+          if (this.keyCodes[0] === row[x - 1] &&
+              this.keyCodes[1] === row[x] &&
+              this.keyCodes[2] === row[x + 1]) {
+            sprite.position.x =x * 32;
+            sprite.position.y = (y - 1) * 32;
+            this.keyCodes = [];
+          }
+        }
+      });
     }
   }
 
