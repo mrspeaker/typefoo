@@ -120,22 +120,17 @@ class Proto4 extends Proto {
               this.keyCodes[1] === row[x] &&
               this.keyCodes[2] === row[x + 1]) {
 
-            console.log(xt, yt,
-              x, y)
             //this.estar.setGrid(this.grid);
             this.estar.findPath(
-              x, y,
-              xt, yt,
+              x, y, xt, yt,
               path => {
-                console.log(path);
-                if (!path) {
-                  return;
-                }
+                if (!path) return;
+                this._timer && clearTimeout(this._timer);
                 const go = path => {
                   if (!path.length) return;
                   sprite.position.x = path[0].x * 32;
                   sprite.position.y = (path[0].y - 1) * 32;
-                  setTimeout(() => go(path.slice(1)), 60);
+                  this._timer = setTimeout(() => go(path.slice(1)), 60);
                 };
                 go(path.reverse());
               });
