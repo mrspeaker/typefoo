@@ -7,7 +7,7 @@ class Proto3 extends Proto {
     const w = map.width;
     const h = map.height;
     const solidLayer = map.layers[0];
-    const data = solidLayer.layer.data;
+    const data = solidLayer.data;
     const simplex = new SimplexNoise();
 
     this.letters = Array.from(new Array(h), (_, j) => {
